@@ -1,0 +1,93 @@
+<!-- Default home page -->
+
+<div id="page-form">
+
+<div id="header-before"></div>
+<header>
+   <h1>Traslados de docencia directa</h1>
+   <p class="lead">Utilice el siguiente formulario para solicitar traslado de departamento para el año 2017.</p>
+</header>
+
+<div class="content">
+
+	<div class="panel panel-default">
+		<div class="panel-heading">Cargo de docencia directa que desea trasladar:</div>
+		<div class="panel-body">
+
+			<div class="table-responsive">
+			<table class="table table-bordered">
+			<tr>
+				<th>Cargo</th>
+				<th>Asignatura</th>
+				<th>Departamento</th>
+				<th>Grado</th>
+				<th>Año ingreso</th>
+				<th>Puntaje</th>
+			</tr>
+			<% cargos.forEach (function(cargo) { %>
+				<tr>
+					<td><%= cargo.cargo %></td>
+					<td><%= cargo.asignatura %></td>
+					<td><%= cargo.departamento %></td>
+					<td><%= cargo.grado %></td>
+					<td><%= cargo.ingreso %></td>
+					<td><%= cargo.puntaje %></td>
+				</tr>
+			<% }) %>
+			</table>
+			</div>
+		</div>
+	</div>
+	<p>La solicitud de traslado de cargos de docencia indirecta y de cargos no docentes se debe realizar utilizando el formulario que corresponda.</p>
+
+	<button type="button" class="btn btn-primary" id='solicitud'>Iniciar solicitud de traslado</button>
+
+	<form id="solicitud">
+<%- partial ('../departamentos/index.ejs') %>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">Datos a incluir en la solicitud:</div>
+		<div class="panel-body">
+
+			<div class="form-horizontal">
+				<div class="form-group">
+					<label for="cedula" class="col-sm-2 control-label">Documento:</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="cedula" value="<%= cedula %>" readonly>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="nombre" class="col-sm-2 control-label">Nombre:</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="nombre" value="<%= nombre %>" readonly>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="asignatura" class="col-sm-2 control-label">Asignatura:</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="asignatura" value="<%= cargos[0].asignatura %>" readonly>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="origen" class="col-sm-2 control-label">Efectivo en:</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="origen" value="<%= cargos[0].departamento %>" readonly>
+					</div>
+				</div>
+				<p>Solicita trasladar su efectividad al primero de estos departamentos que tenga cupo para la asignatura:</p>
+				<div class="form-group">
+					<label for="destino" class="col-sm-2 control-label">Destino:</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="destino" readonly>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-primary" id='submit' disabled="disabled">Enviar solicitud de traslado</button>
+	</form>
+
+</div>
+
+</div>

@@ -1,0 +1,22 @@
+<div id="departamentos">
+
+<div class="panel panel-default">
+  <div class="panel-heading">Seleccione en orden de preferencia el departamento a donde solicita traslado:</div>
+
+  <div class="panel-body">
+	<div class="row">
+	<% departamentos.forEach (function(dpto) { %>
+		<div class="col-xs-6 col-sm-4 col-lg-2">
+			<div class="input-group dpto" data-toggle="buttons" dptoid="<%= dpto.id %>"<% if (origen==dpto.id) { %> disabled<% } %>>
+				<span class="input-group-addon" id="orden_<%= dpto.id %>" style="min-width:3em"></span>
+				<label class="btn btn-default" data-toggle="buttons" dptoid="<%= dpto.id %>">
+					<input type="checkbox" autocomplete="off"><%= dpto.name %>
+				</label>
+			</div>
+		</div>
+	<% }); %>
+	</div>
+  </div>
+</div>
+
+</div>

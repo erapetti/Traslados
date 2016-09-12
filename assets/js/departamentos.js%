@@ -1,0 +1,26 @@
+var orden=0;
+var arrOrden = Array();
+
+$("div.dpto").click(function(){
+	if ( ! $(this).find('input').prop('checked')) {
+		// Agrego este dpto como opcion numero "orden"
+		orden++;
+		arrOrden[orden] = $(this).attr('dptoid');
+		$('#orden_'+$(this).attr('dptoid')).text(orden+'º');
+		$(this).find('input').prop('checked',true); // por si hizo clic en el número
+	} else {
+		// Saco este dpto de la lista
+		orden--;
+		$('#orden_'+$(this).attr('dptoid')).text('');
+		var pos = jQuery.inArray( $(this).attr('dptoid'), arrOrden);
+		if (pos > -1) {
+			// saco el elemento
+			arrOrden.splice( pos,1 );
+			// redibujo los otros elementos
+			for (o in arrOrden) {
+				$('#orden_'+arrOrden[o]).text(o+'º');
+			}
+		}
+	}
+	return 0;
+});

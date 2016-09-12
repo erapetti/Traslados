@@ -1,0 +1,21 @@
+<div id="asignaturas">
+
+<div class="panel panel-default">
+  <div class="panel-heading">Seleccione la asignatura para la cual solicita traslado:</div>
+
+  <div class="panel-body">
+	<div class="row">
+	<% asignaturas.forEach (function(asig) { %>
+		<div class="col-xs-12 col-sm-6 col-lg-3">
+			<div class="input-group asig" data-toggle="buttons" asigid="<%= asig.AsignId %>">
+				<label class="btn btn-default">
+					<input type="checkbox" autocomplete="off"><%= asig.AsignDesc %>
+				</label>
+			</div>
+		</div>
+	<% }); %>
+	</div>
+  </div>
+</div>
+
+</div>
