@@ -3,6 +3,8 @@
     "modules": {}
   },
   "hooks": {
+    "sockets": false,
+    "pubsub": false,
     "session": false
   }
 }

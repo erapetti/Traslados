@@ -17,6 +17,6 @@ module.exports = {
 	attributes: {
 		AsignId: 'integer',
 		DeptoId: 'integer',
+    Cupo: 'integer',
 	}
 };
-

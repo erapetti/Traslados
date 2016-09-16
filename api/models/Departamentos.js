@@ -22,10 +22,4 @@ module.exports = {
 		DeptoNombre: 'string',
 	},
 
-	_get: function(v) {
-//		this.find(function(v){if (v.DeptoId===e.FncEsDepto){return true}}).DeptoNombre;
-		console.log(this);
-	},
-
 };
-

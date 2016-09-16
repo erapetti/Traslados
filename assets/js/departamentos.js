@@ -1,5 +1,6 @@
 var orden=0;
 var arrOrden = Array();
+$('#destino').val('');
 
 $("a.dpto[disabled!=disabled]").click(function(){
 	var pos = jQuery.inArray( $(this).attr('dptoid'), arrOrden);
@@ -22,12 +23,14 @@ $("a.dpto[disabled!=disabled]").click(function(){
 		$(this).removeClass("btn-success");
 	}
 	// redibujo el destino en el formulario
-	$('input#destino').val( arrOrden.map(function(v){ return departamentos[v] }).join(', ').substr(2) );
+	$('#destino').val( arrOrden.map(function(v){ return departamentos[v] }).join(', ').substr(2) );
 
 	// habilito submit si corresponde
 	$('button#submit').removeAttr('disabled');
-	if ($('input#destino').val() === "") {
+	$('button#btnpaso2').removeAttr('disabled');
+	if ($('#destino').val() === "") {
 		$('button#submit').attr('disabled','disabled');
+		$('button#btnpaso2').attr('disabled','disabled');
 	}
 
 	return 0;

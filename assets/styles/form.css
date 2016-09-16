@@ -1,17 +1,17 @@
 html {
   height: 100%;
-  overflow: hidden;
+  //overflow: hidden;
 }
 body,div#page-form {
   margin:0;
-  padding:0;
-  -webkit-perspective: 1px;
-  perspective: 1px;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
+  padding:0 !important;
+//  -webkit-perspective: 1px;
+//  perspective: 1px;
+//  -webkit-transform-style: preserve-3d;
+//  transform-style: preserve-3d;
   height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  //overflow-y: scroll;
+  //overflow-x: hidden;
 }
 div#page-form header {
   box-sizing: border-box;
@@ -24,11 +24,11 @@ div#page-form header {
 //  width: 100vw;
   height: 269px;
 }
-div#page-form header, div#page-form header-before {
+div#page-form header, div#page-form #header-before {
   background: 50% 50% / cover;
   background-origin: border-box;
 }
-div#page-form header-before {
+div#page-form #header-before {
   bottom: 0;
   content: "";
   left: 0;
@@ -38,13 +38,13 @@ div#page-form header-before {
   display: block;
   background-color: #fff;
   background-image: url(/images/fondo.jpg);
-//  background-size: cover;
+  background-size: cover;
   -webkit-transform-origin: center center 0;
   -webkit-transform: translateZ(-1px) scale(2);
   transform-origin: center center 0;
   transform: translateZ(-1px) scale(2);
   z-index: -1;
-  height: 269px;
+  height: 288px;
 }
 div#page-form header * {
   font-weight: normal;
@@ -52,6 +52,7 @@ div#page-form header * {
   text-align: center;
   margin: 0;
   padding: 1em 0;
+  text-shadow: -1px -1px 0 #ddd, 1px -1px 0 #ddd, -1px 1px 0 #ddd, 1px 1px 0 #ddd;
 }
 div#page-form header p {
   background-color: hsla(0, 0%, 100%,0.3);
@@ -66,4 +67,12 @@ div#page-form div.content {
   z-index: 2;
   min-height: 100vh;
 }
+div.content .panel-default > .panel-heading {
+  background: linear-gradient(to bottom,rgb(51,122,183) 0px,rgb(28,66,99) 100%);
+  color:#fff;
+}
+div.content .panel-default {
+  border-color:rgb(51,122,183);
+}
 form#solicitud {display:none;padding-top:2em;}
+div#paso2 {display:none}
