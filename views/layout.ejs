@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <% if (sails.config.environment != 'development') { %><base href="/node/traslados"><% } %>
     <title><%=typeof title == 'undefined' ? 'New Sails App' : title%></title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!--STYLES-->
-    <link rel="stylesheet" href="/styles/bootstrap/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/styles/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/styles/form.css">
-    <link rel="stylesheet" href="/styles/importer.css">
-    <link rel="stylesheet" href="/styles/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/styles/zz-ie10-viewport-bug-workaround.css">
+
     <!--STYLES END-->
   </head>
 
@@ -20,16 +16,11 @@
     <%- body %>
 
     <!--TEMPLATES-->
-    
+
     <!--TEMPLATES END-->
 
     <!--SCRIPTS-->
-    <script src="/js/dependencies/sails.io.js"></script>
-    <script src="/js/dependencies/0_jquery/jquery-3.1.0.min.js"></script>
-    <script src="/js/dependencies/1_bootstrap/bootstrap.min.js"></script>
-    <script src="/js/departamentos.js"></script>
-    <script src="/js/form.js"></script>
-    <script src="/js/zz_ie10-viewport-bug-workaround.js"></script>
+
     <!--SCRIPTS END-->
   </body>
 </html>
