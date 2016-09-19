@@ -74,6 +74,7 @@ div.content .panel-default > .panel-heading {
 div.content .panel-default {
   border-color:rgb(51,122,183);
 }
-form#solicitud {display:none;padding-top:2em;}
+form#solicitud {display:none;padding-top:2em}
 div#paso2 {display:none}
-.modal-backdrop.in {z-index: auto;}
+.modal-backdrop.in {z-index: auto}
+div#page-form div.content p.intro {margin-bottom:2em;font-size:120%}

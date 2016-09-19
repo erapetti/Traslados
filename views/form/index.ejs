@@ -20,6 +20,11 @@
 
 <% } else if(typeof traslado !== 'undefined') { -%>
 
+  <p class="intro">Ud. tiene registradas las opciones de destino
+     para su traslado.<br>
+     A continuación puede anular su selección actual si es que desiste del
+     traslado o porque desea modificar los destinos o su ordenamiento.</p>
+
   <div class="panel panel-default">
 		<div class="panel-heading">Solicitud de traslado realizada:</div>
 		<div class="panel-body">
@@ -69,6 +74,15 @@
 
 <% } else { -%>
 
+  <p class="intro">Actualmente no tiene registradas las opciones de
+     destino para su traslado.<br>
+     Normalmente su traslado se hará efectivo al primer destino que elija
+     salvo que en el mismo no existan Unidades Docentes
+     disponibles, en cuyo caso se considerarán, en orden, los otros destinos que
+     indicó hasta encontrar uno con disponibilidad.<br>
+     Su traslado no se hará efectivo si no registra su opción de destinos o
+     no hay Unidades Docentes en ninguno de los departamentos por los que
+     optó.</p>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">Cargo de docencia directa que desea trasladar:</div>
