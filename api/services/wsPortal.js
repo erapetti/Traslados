@@ -5,7 +5,6 @@ module.exports = {
 	getSession: function(sesionId, callback) {
 		// recibe string con el número de sesión
 		// llama a callback con parámetros err y {Sesionesid,Userid,Dependid,Lugarid}
-
 		if (typeof sesionId === 'undefined' || ! sesionId.match(/^ *([a-zA-Z\d]+) *$/)) {
 			return callback(new Error("Sesión no válida. Reinicie su conexión con el portal de servicios"),undefined);
 		}
@@ -16,7 +15,6 @@ module.exports = {
 				return callback(err,undefined);
 			}
 			client.Execute({Sesionesid:sesionId}, function(err, result) {
-
 				if (!result.Userid) {
 					return callback(new Error("Sesión no válida. Reinicie su conexión con el portal de servicios"),undefined);
 				}

@@ -5,16 +5,70 @@
 <div id="header-before"></div>
 <header>
    <h1>Traslados de docencia directa</h1>
-   <p class="lead">Utilice el siguiente formulario para solicitar traslado de departamento para el año 2017.</p>
+   <p class="lead">Traslado de departamento para el año 2017.</p>
 </header>
 
 <div class="content">
 
-<% if (typeof cargos[0] === 'undefined') { %>
+<% if (typeof mensaje !== 'undefined') { -%>
   <div class="alert alert-danger">
-  	<strong>ERROR:</strong> No se encuentran cargos de docencia directa para trasladar
+  	<strong>ERROR:</strong> <%= mensaje.texto %>
+    <% if (mensaje.detalle) { -%>
+      <pre><%= mensaje.detalle %></pre>
+    <% } %>
   </div>
-<% } else { %>
+
+<% } else if(typeof traslado !== 'undefined') { -%>
+
+  <div class="panel panel-default">
+		<div class="panel-heading">Solicitud de traslado realizada:</div>
+		<div class="panel-body">
+
+			<div class="table-responsive">
+			<table class="table table-bordered">
+			<tr>
+				<th>Nombre</th>
+				<th>Asignatura</th>
+				<th>Departamento</th>
+				<th>Destinos</th>
+				<th>Fecha de solicitud</th>
+			</tr><tr>
+        <td><%= persona.pernombrecompleto %></td>
+        <td><%= cargo.asignatura %></td>
+        <td><%= cargo.departamento %></td>
+        <td><%= traslado.Destino %></td>
+        <td><%= traslado.UpdatedAt %></td>
+      </tr>
+      </table>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete"><b>Anular solicitud de traslado</b></button>
+  <!-- Modal -->
+  <div id="confirmDelete" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Anular solicitud</h4>
+        </div>
+        <div class="modal-body">
+          <p>¿Confirma que desea anular la solicitud de traslado?</p>
+        </div>
+        <form method="post" id='anular'>
+        <input type="hidden" name="tid" value="<%= traslado.id %>">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+          <button type="submit" class="btn btn-danger" name="anular" value="s">Sí</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+<% } else { -%>
+
 
 	<div class="panel panel-default">
 		<div class="panel-heading">Cargo de docencia directa que desea trasladar:</div>
@@ -28,16 +82,13 @@
 				<th>Departamento</th>
 				<th>Grado</th>
 				<th>Año ingreso</th>
-			</tr>
-			<% cargos.forEach (function(cargo) { %>
-				<tr>
+			</tr><tr>
 					<td><%= cargo.cargo %></td>
 					<td><%= cargo.asignatura %></td>
 					<td><%= cargo.departamento %></td>
 					<td><%= cargo.grado %></td>
 					<td><%= cargo.ingreso %></td>
 				</tr>
-			<% }) %>
 			</table>
 			</div>
 		</div>
@@ -46,7 +97,7 @@
 
 	<button type="button" class="btn btn-primary" id='btnsolicitud'>Iniciar solicitud de traslado</button>
 
-  <form id="solicitud">
+  <form id="solicitud" method="post">
 
 <%- partial ('../departamentos/index.ejs') %>
 
@@ -61,25 +112,25 @@
   				<div class="form-group">
   					<label for="cedula" class="col-sm-2 control-label">Documento:</label>
   					<div class="col-sm-2">
-  						<input type="text" class="form-control" id="cedula" value="<%= cedula %>" readonly>
+  						<input type="text" class="form-control" id="cedula" value="<%= persona.ci %>" readonly>
   					</div>
   				</div>
   				<div class="form-group">
   					<label for="nombre" class="col-sm-2 control-label">Nombre:</label>
   					<div class="col-sm-4">
-  						<input type="text" class="form-control" id="nombre" value="<%= nombre %>" readonly>
+  						<input type="text" class="form-control" id="nombre" value="<%= persona.pernombrecompleto %>" readonly>
   					</div>
   				</div>
   				<div class="form-group">
   					<label for="asignatura" class="col-sm-2 control-label">Asignatura:</label>
   					<div class="col-sm-4">
-  						<input type="text" class="form-control" id="asignatura" value="<%= cargos[0].asignatura %>" readonly>
+  						<input type="text" class="form-control" id="asignatura" value="<%= cargo.asignatura %>" readonly>
   					</div>
   				</div>
   				<div class="form-group">
   					<label for="origen" class="col-sm-2 control-label">Efectivo en:</label>
   					<div class="col-sm-4">
-  						<input type="text" class="form-control" id="origen" value="<%= cargos[0].departamento %>" readonly>
+  						<input type="text" class="form-control" id="origen" value="<%= cargo.departamento %>" readonly>
   					</div>
   				</div>
   				<p>Solicita trasladar su efectividad al primero de estos departamentos que tenga cupo para la asignatura:</p>
@@ -87,6 +138,7 @@
   					<label for="destino" class="col-sm-2 control-label">Destino:</label>
   					<div class="col-sm-10">
   						<textarea class="form-control" id="destino" rows="3" readonly></textarea>
+              <input type="hidden" name="destino" id="destinoids">
   					</div>
   				</div>
   			</div>

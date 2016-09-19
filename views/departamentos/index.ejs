@@ -5,11 +5,11 @@
 
   <div class="panel-body">
 	<div class="row">
-	<% departamentos.forEach (function(dpto) { %>
+	<% departamentos.forEach (function(dpto) { -%>
 		<div class="col-xs-6 col-sm-4 col-lg-2">
 			<div class="input-group" data-toggle="buttons">
 				<span class="input-group-addon" id="orden_<%= dpto.DeptoId %>" style="min-width:3em;background-color:#fff;border:0"></span>
-				<a role="button" class="btn btn-default dpto" data-toggle="buttons" dptoid="<%= dpto.DeptoId %>" <% if (origen==dpto.DeptoId) { %> disabled="disabled"<% } %>><%= dpto.DeptoNombre %></a>
+				<a role="button" class="btn btn-default dpto" data-toggle="buttons" dptoid="<%= dpto.DeptoId %>" <% if (origen==dpto.DeptoId || ! cupos.find(function(v){if (v.DeptoId===dpto.DeptoId){return true}})) { %> disabled="disabled"<% } %>><%= dpto.DeptoNombre %></a>
 			</div>
 		</div>
 	<% }); %>
@@ -25,3 +25,6 @@
 </script>
 
 </div>
+
+<p>Los departamentos con color de fondo gris no se pueden elegir porque no tienen Unidades Docentes (20 horas) disponibles.<br>
+   En el sitio web institucional está publicada la <a target="_blank" href="http://www.ces.edu.uy/ces/images/Traslados_DD_2017_modificado_14_08_2016.pdf">lista completa de Unidades Docentes disponibles</a> por asignatura.</p>

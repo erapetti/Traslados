@@ -76,3 +76,4 @@ div.content .panel-default {
 }
 form#solicitud {display:none;padding-top:2em;}
 div#paso2 {display:none}
+.modal-backdrop.in {z-index: auto;}

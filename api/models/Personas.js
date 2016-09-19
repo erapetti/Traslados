@@ -17,17 +17,26 @@ module.exports = {
     pernombrecompleto: 'string',
   },
 
-  nombrecompleto: function(perci,callback) {
+  info: function(perci,callback) {
     return this.query(`
-      SELECT pernombrecompleto
+      SELECT perid,pernombrecompleto
       FROM PERSONAS
       JOIN PERSONASDOCUMENTOS
       USING (PerId)
       WHERE PAISCOD='UY'
         AND DOCCOD='CI'
         AND PERDOCID=?
+      LIMIT 1
     `,
     [perci],
-    callback);
+    function(err,result){
+      if (err) {
+        return err
+      }
+      if (result===null) {
+        return new Error("No se pueden obtener los datos de la persona",undefined);
+      }
+      callback(undefined, result[0])
+    });
   },
 };

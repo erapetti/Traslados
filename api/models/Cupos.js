@@ -7,12 +7,12 @@
 
 module.exports = {
 
-        connection: 'traslados',
-        autoCreatedAt: false,
-        autoUpdatedAt: false,
-        autoPK: false,
-        migrate: 'safe',
-        tableName: 'cupos',
+  connection: 'Personal',
+  autoCreatedAt: false,
+  autoUpdatedAt: false,
+  autoPK: false,
+  migrate: 'safe',
+  tableName: 'traslados_cupos',
 
 	attributes: {
 		AsignId: 'integer',
