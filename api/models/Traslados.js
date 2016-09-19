@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  connection: 'Personal',
+  connection: 'traslados',
   autoCreatedAt: true,
   autoUpdatedAt: true,
   autoPK: false,
