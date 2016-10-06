@@ -52,4 +52,7 @@ module.exports.policies = {
   FormController: {
     index: true,
   },
+  ProcesoController: {
+    index: true,
+  },
 };

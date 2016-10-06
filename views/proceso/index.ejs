@@ -1,0 +1,71 @@
+<!-- Default home page -->
+
+<div id="page-form">
+
+<div id="header-before"></div>
+<header>
+   <h1>Traslados de docencia directa</h1>
+   <p class="lead">Traslado de departamento para el año 2017.</p>
+</header>
+
+<div class="content">
+
+<% if (typeof mensaje !== 'undefined') { -%>
+  <div class="alert alert-danger">
+  	<strong>ERROR:</strong> <%= mensaje.texto %>
+    <% if (mensaje.detalle) { -%>
+      <pre><%= mensaje.detalle %></pre>
+    <% } %>
+  </div>
+
+<% } else if(typeof traslado !== 'undefined') { -%>
+
+  <p class="intro">A continuación se presenta el resultado del proceso de traslado.</p>
+
+  <div class="panel panel-default">
+		<div class="panel-heading">Traslados:</div>
+		<div class="panel-body">
+
+			<div class="table-responsive">
+			<table class="table table-bordered">
+			<tr>
+				<th>Nombre</th>
+				<th>Asignatura</th>
+				<th>Departamento</th>
+				<th>Destinos</th>
+				<th>Grado</th>
+        <th>Cupos</th>
+        <th>Resultado</th>
+			</tr>
+      <% traslado.forEach(function(info) { %><tr>
+        <td><%= info.PerNombreCompleto %></td>
+        <td><%= info.AsignDesc %></td>
+        <td><%= arrDepartamentos[info.DeptoId] %></td>
+        <td><%= JSON.parse(info.Destino).map(function(d){
+          return arrDepartamentos[d];
+        }).join() %></td>
+        <td><%= info.Grado %></td>
+        <td><%= JSON.parse(info.Destino).map(function(d){
+          return info.cupo[d];
+        }).join() %></td>
+        <td><%= arrDepartamentos[info.destino] %></td>
+      </tr><% }) %>
+      </table>
+      </div>
+    </div>
+  </div>
+
+
+<% } else { -%>
+
+  <p class="intro">Proceso de traslado de Docencia Directa</p>
+
+  <form id="proceso" method="post">
+	<button type="submit" class="btn btn-primary" id='btnproceso' name="proceso" value="on">Iniciar proceso de traslado</button>
+  </form>
+
+<% } %>
+
+</div>
+
+</div>

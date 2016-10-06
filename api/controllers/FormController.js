@@ -22,7 +22,8 @@ module.exports = {
 				err = undefined;
 				//session = {Sesionesid:1,Userid:'u10121248',Dependid:1023,Lugarid:1023};
 				//session = {Sesionesid:1,Userid:'u19724241',Dependid:1023,Lugarid:1023};
-				session = {Sesionesid:1,Userid:'u13683344',Dependid:1023,Lugarid:1023};
+				//session = {Sesionesid:1,Userid:'u13683344',Dependid:1023,Lugarid:1023};
+				session = {Sesionesid:1,Userid:'u17488617',Dependid:1023,Lugarid:1023};
 			}
 			if (err) {
 				return res.forbidden(err);

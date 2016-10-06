@@ -36,7 +36,11 @@ module.exports.routes = {
 //    view: 'homepage'
     controller: 'form',
     action: 'index'
-  }
+  },
+  '/proceso': {
+    controller: 'proceso',
+    action: 'index'
+  },
 
   /***************************************************************************
   *                                                                          *
