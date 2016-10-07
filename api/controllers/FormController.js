@@ -15,7 +15,7 @@ module.exports = {
 		if (sails.config.environment === "development") {
 			sessionid = '9728448076454730240';
 		} else {
-			sessionid = req.cookies.SESION;
+			sessionid = req.cookies.SESION.replace(/[+ ]/g,'');
 		}
 		wsPortal.getSession(sessionid, function(err,session) {
 			if (sails.config.environment === "development") {
@@ -27,8 +27,6 @@ module.exports = {
 			}
 			if (err) {
 				return res.forbidden(err);
-				//err.status = 403;
-				//return res.negotiate(err);
 			}
 
 			var ci = session.Userid.substr(1);
