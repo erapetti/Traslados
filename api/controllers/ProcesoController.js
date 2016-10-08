@@ -34,10 +34,6 @@ module.exports = {
 				return sprintf("%02d/%02d/%04d", d.getDate(),d.getMonth()+1,d.getFullYear());
 			};
 
-			if (! req.param("proceso")) {
-				return res.view();
-			}
-
 			Departamentos.find().exec(function(err, departamentos) {
 				if (err) {
 					return res.serverError(err);

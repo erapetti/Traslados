@@ -1,0 +1,18 @@
+table#resultado {
+  margin-top:2em;
+  margin-bottom:2em;
+}
+button {
+  margin:0.5em;
+  width:200px;
+}
+@media screen {
+  table#resultado {
+    table-layout:fixed;
+  }
+}
+@media print {
+  #botones {
+    display:none;
+  }
+}

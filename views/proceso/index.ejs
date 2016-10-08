@@ -18,54 +18,49 @@
     <% } %>
   </div>
 
-<% } else if(typeof traslado !== 'undefined') { -%>
-
-  <p class="intro">A continuación se presenta el resultado del proceso de traslado.</p>
-
-  <div class="panel panel-default">
-		<div class="panel-heading">Traslados:</div>
-		<div class="panel-body">
-
-			<div class="table-responsive">
-			<table class="table table-bordered">
-			<tr>
-				<th>Nombre</th>
-				<th>Asignatura</th>
-				<th>Departamento</th>
-				<th>Destinos</th>
-				<th>Grado</th>
-        <th>Cupos</th>
-        <th>Resultado</th>
-			</tr>
-      <% traslado.forEach(function(info) { %><tr>
-        <td><%= info.PerNombreCompleto %></td>
-        <td><%= info.AsignDesc %></td>
-        <td><%= arrDepartamentos[info.DeptoId] %></td>
-        <td><%= JSON.parse(info.Destino).map(function(d){
-          return arrDepartamentos[d];
-        }).join() %></td>
-        <td><%= info.Grado %></td>
-        <td><%= JSON.parse(info.Destino).map(function(d){
-          return info.cupo[d];
-        }).join() %></td>
-        <td><%= arrDepartamentos[info.destino] %></td>
-      </tr><% }) %>
-      </table>
-      </div>
-    </div>
-  </div>
-
-
 <% } else { -%>
 
   <p class="intro">Proceso de traslado de Docencia Directa</p>
 
-  <form id="proceso" method="post">
-	<button type="submit" class="btn btn-primary" id='btnproceso' name="proceso" value="on">Iniciar proceso de traslado</button>
-  </form>
+  <ol id="botones">
+    <li><button type="button" class="btn btn-default" id='btnver'>Ver solicitudes de traslado</button></li>
+    <li><button type="button" class="btn btn-default" id='btnproceso'>Iniciar proceso de traslado</button></li>
+    <li><button type="button" class="btn btn-default" id='btnimprimir'>Imprimir página</button></li>
+  </ol>
+
+    <div class="table-responsive">
+    <table class="table table-bordered" id="resultado">
+    <tr>
+    	<th>Nombre</th>
+    	<th>Asignatura</th>
+    	<th>Departamento</th>
+    	<th>Destinos</th>
+    	<th>Grado</th>
+      <th style="width:100px">Cupos</th>
+      <th style="width:200px">Resultado</th>
+    </tr>
+    <% traslado.forEach(function(info) { %><tr>
+      <td><%= info.PerNombreCompleto %></td>
+      <td><%= info.AsignDesc %></td>
+      <td><%= arrDepartamentos[info.DeptoId] %></td>
+      <td><%= JSON.parse(info.Destino).map(function(d){
+        return arrDepartamentos[d];
+      }).join(', ') %></td>
+      <td><%= info.Grado %></td>
+      <td><%= JSON.parse(info.Destino).map(function(d){
+        return info.cupo[d];
+      }).join(', ') %></td>
+      <td><%= arrDepartamentos[info.destino] %></td>
+    </tr><% }) %>
+    </table>
+    </div>
 
 <% } %>
 
 </div>
 
 </div>
+
+<script type="text/javascript">
+var postulantes = <%= traslado.length %>;
+</script>
