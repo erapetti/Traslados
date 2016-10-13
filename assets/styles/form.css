@@ -65,7 +65,7 @@ div#page-form div.content {
   padding: 3em 1em;
   position: relative;
   z-index: 2;
-  min-height: 100vh;
+//  min-height: 100vh;
 }
 div.content .panel-default > .panel-heading {
   background: linear-gradient(to bottom,rgb(51,122,183) 0px,rgb(28,66,99) 100%);
