@@ -11,7 +11,10 @@ module.exports = {
 		if (sails.config.environment === "development") {
 			sessionid = '9728448076454730240';
 		} else {
-			sessionid = req.cookies.SESION.replace(/[+ ]/g,'');
+			sessionid = req.cookies.SESION
+			if (typeof sesionid !== 'undefined') {
+				sessionid = sessionid.replace(/[+ ]/g,'');
+			}
 		}
 		wsPortal.getSession(sessionid, function(err,session) {
 			if (sails.config.environment === "development") {
