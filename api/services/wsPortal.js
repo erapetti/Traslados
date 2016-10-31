@@ -10,29 +10,29 @@ module.exports = {
 		sesionId = sesionId.replace(/^[+ ]*/, '').replace(/[+ ]*$/, '');
 
 		if (typeof sesionId === 'undefined' || ! sesionId.match(/^([a-zA-Z\d]+)$/)) {
-			sails.log("Sesión no válida: ",sesionId);
+			sails.log.info("Sesión no válida: ",sesionId);
 			return callback(new Error("Sesión no válida. Reinicie su conexión con el portal de servicios"),undefined);
 		}
 
 		var soap = require('soap');
 		soap.createClient('api/services/aws_dame_datos_de_sesion.wsdl', function(err, client) {
 			if (err) {
-				sails.log("aws_dame_datos_de_sesion: ",err);
+				sails.log.error("aws_dame_datos_de_sesion: ",err);
 				return callback(err,undefined);
 			}
 			client.Execute({Sesionesid:sesionId}, function(err, result) {
 
 				if (!result.Userid) {
-					sails.log("Userid es vacío");
+					sails.log.info("Userid es vacío");
 					return callback(new Error("Sesión no válida. Reinicie su conexión con el portal de servicios"),undefined);
 				}
-				wsPortal.leoPermiso({Sesionesid:sesionId,Programa:'presentismo',Modo:'DSP'}, function(err, permiso) {
+				wsPortal.leoPermiso({Sesionesid:sesionId,Programa:'traslados',Modo:'DSP'}, function(err, permiso) {
 					if (err) {
-						sails.log("leoPermiso: ",err);
+						sails.log.info("leoPermiso: ",err);
 						return callback(err, undefined);
 					}
 					if (permiso.Autorizado !== "S") {
-						sails.log("leoPermiso: No tiene los permisos requeridos");
+						sails.log.info("leoPermiso: No tiene los permisos requeridos");
 						return callback(new Error("No tiene los privilegios requeridos para acceder a esta página"), undefined);
 					}
 					return callback(undefined,result);
@@ -49,10 +49,12 @@ module.exports = {
 		var soap = require('soap');
 		soap.createClient('api/services/aws_autorizar_usuario_objeto.wsdl', function(err, client) {
 			if (err) {
+				sails.log.error("aws_autorizar_usuario_objeto: ",err);
 				return callback(err,undefined);
 			}
 			client.Execute(args, function(err, result) {
 				if (err) {
+					sails.log.error("aws_autorizar_usuario_objeto callback",err);
 					return callback(err,undefined);
 				}
 				return callback(undefined, result);
