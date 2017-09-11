@@ -53,7 +53,7 @@ module.exports = {
 					}
 					if (typeof efectividad==='undefined') {
 						var mensaje = {texto: "No se encuentran cargos efectivos para la cédula "+ci};
-						return res.view({mensaje:mensaje});
+						return res.view({anio:anio,mensaje:mensaje});
 					}
 
 					var ingreso = new Date(efectividad.FncEsFecha);
@@ -66,7 +66,7 @@ module.exports = {
 
 						var asig = asignaturas.AsignDesc;
 
-						Departamentos.find().exec(function(err, departamentos) {
+						Departamentos.find({DeptoId:{'<':20}}).exec(function(err, departamentos) {
 							if (err) {
 								return res.serverError(err);
 							}
@@ -118,7 +118,7 @@ module.exports = {
 										traslado.Destino = traslado.Destino.map(function(v){ return arrDepartamentos[v] }).toString();
 									} catch (e) {
 									}
-									return res.view({persona:persona,cargo:cargo,traslado:traslado});
+									return res.view({anio:anio,persona:persona,cargo:cargo,traslado:traslado});
 								}
 
 								Cupos.find({AsignId:efectividad.FncEsGrupI}).exec(function(err, cupos) {
@@ -129,7 +129,7 @@ module.exports = {
 									var destino = req.param("destino");
 									if (! destino) {
 										// formulario inicial
-										return res.view({persona:persona,cargo:cargo,departamentos:departamentos,cupos:cupos,origen:efectividad.FncEsDepto});
+										return res.view({anio:anio,persona:persona,cargo:cargo,departamentos:departamentos,cupos:cupos,origen:efectividad.FncEsDepto});
 									}
 									try {
 										var destinos = destino.split(',').map(function(v) { return parseInt(v) });
@@ -146,7 +146,7 @@ module.exports = {
 												var mensaje = {texto:"No se pudo guardar los departamentos destino para "+session.Userid+" ("+destino+")",
 																			 detalle:err.details};
 												sails.log(new Date,mensaje.texto, mensaje.detalle);
-												return res.view({persona:persona,cargo:cargo,departamentos:departamentos,cupos:cupos,origen:efectividad.FncEsDepto,mensaje:mensaje});
+												return res.view({anio:anio,persona:persona,cargo:cargo,departamentos:departamentos,cupos:cupos,origen:efectividad.FncEsDepto,mensaje:mensaje});
 											} else {
 												sails.log(new Date,"Guardado destino de "+session.Userid+" que es "+destino);
 												return res.redirect(sails.config.environment==='development' ? '' : '/node/traslados');

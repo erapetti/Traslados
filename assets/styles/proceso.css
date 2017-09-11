@@ -4,7 +4,7 @@ table#resultado {
 }
 button {
   margin:0.5em;
-  width:200px;
+  width:210px;
 }
 @media screen {
   table#resultado {

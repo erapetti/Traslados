@@ -8,13 +8,12 @@
 module.exports = {
 
 	index: function (req, res) {
-	    Departamentos.find().exec(function(err, departamentos) {
+	    Departamentos.find({DeptoId:{'<':20}}).exec(function(err, departamentos) {
 		if (err) {
 			return res.serverError(err);
 		}
 		res.view({departamentos:departamentos});
 	    });
 	}
-	
-};
 
+};
