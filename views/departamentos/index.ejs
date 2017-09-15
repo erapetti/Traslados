@@ -5,24 +5,17 @@
 
   <div class="panel-body">
 	<div class="row">
-	<% departamentos.forEach (function(dpto) { -%>
+	<% for(d in arrDepartamentos) { -%>
 		<div class="col-xs-6 col-sm-4 col-lg-2">
 			<div class="input-group" data-toggle="buttons">
-				<span class="input-group-addon" id="orden_<%= dpto.DeptoId %>" style="min-width:3em;background-color:#fff;border:0"></span>
-				<a role="button" class="btn btn-default dpto" data-toggle="buttons" dptoid="<%= dpto.DeptoId %>" <% if (origen==dpto.DeptoId || ! cupos.find(function(v){if (v.DeptoId===dpto.DeptoId){return true}})) { %> disabled="disabled"<% } %>><%= dpto.DeptoNombre %></a>
+				<span class="input-group-addon" id="orden_<%= d %>" style="min-width:3em;background-color:#fff;border:0"></span>
+				<a role="button" class="btn btn-default dpto" data-toggle="buttons" dptoid="<%= d %>"><%= arrDepartamentos[d] %></a>
 			</div>
 		</div>
-	<% }); %>
+	<% } %>
 	</div>
   </div>
 </div>
-
-<script type="text/javascript">
-	var departamentos = Array();
-	<% departamentos.forEach (function(dpto) { -%>
-		departamentos[<%= dpto.DeptoId %>] = '<%= dpto.DeptoNombre %>';
-	<% }); %>
-</script>
 
 </div>
 

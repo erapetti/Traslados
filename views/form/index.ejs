@@ -1,4 +1,24 @@
 <!-- Default home page -->
+<script type="text/javascript">
+
+var arrAsignaturas = Array();
+<% for (a in arrAsignaturas) { -%>
+  arrAsignaturas[<%= a %>] = "<%= arrAsignaturas[a] %>";
+<% } %>
+
+var arrDepartamentos = Array();
+<% for (d in arrDepartamentos) { -%>
+  arrDepartamentos[<%= d%>] = "<%= arrDepartamentos[d] %>";
+<% } %>
+
+var arrCupos = Array();
+<% for (a in arrCupos) { -%>
+  arrCupos[<%= a %>] = Array();
+  <% for (d in arrCupos[a]) { -%>
+    arrCupos[<%= a %>][<%= d %>]=<%= arrCupos[a][d] %>;
+  <% } -%>
+<% } %>
+</script>
 
 <div id="page-form">
 
@@ -46,6 +66,7 @@
       </tr>
       </table>
       </div>
+
     </div>
   </div>
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete"><b>Anular solicitud de traslado</b></button>
@@ -95,20 +116,26 @@
 		<div class="panel-body">
 
 			<div class="table-responsive">
-			<table class="table table-bordered">
+			<table class="table table-bordered" id="cargos">
 			<tr>
+        <th></th>
 				<th>Cargo</th>
 				<th>Asignatura</th>
 				<th>Departamento</th>
 				<th>Grado</th>
 				<th>Año ingreso</th>
-			</tr><tr>
-					<td><%= cargo.cargo %></td>
-					<td><%= cargo.asignatura %></td>
-					<td><%= cargo.departamento %></td>
-					<td><%= cargo.grado %></td>
-					<td><%= cargo.ingreso %></td>
-				</tr>
+      </tr>
+        <% efectividades.forEach(function(efectividad){ -%>
+			<tr id="tr-<%= efectividad.FncEsGrupI %>-<%= efectividad.FncEsDepto %>">
+        <td><input type="radio" name="cargo" id="<%= efectividad.FncEsGrupI %>-<%= efectividad.FncEsDepto %>"<% if (Object.keys(efectividades).length==1) {%> checked="checked"<%}%>></td>
+				<td>DOCENTE</td>
+				<td><%= arrAsignaturas[efectividad.FncEsGrupI] %></td>
+        <td><%= arrDepartamentos[efectividad.FncEsDepto] %></td>
+				<td><%= efectividad.FncEsGrado %></td>
+				<td><%= new Date(efectividad.FncEsFecha).getFullYear() %></td>
+			</tr>
+      <% var AsignId = efectividad.FncEsGrupI; var DeptoId = efectividad.FncEsDepto %>
+      <% }) %>
 			</table>
 			</div>
 		</div>
@@ -144,13 +171,15 @@
   				<div class="form-group">
   					<label for="asignatura" class="col-sm-2 control-label">Asignatura:</label>
   					<div class="col-sm-4">
-  						<input type="text" class="form-control" id="asignatura" value="<%= cargo.asignatura %>" readonly>
+              <input type="hidden" class="form-control" id="asignatura" value="<%= Object.keys(efectividades).length>1 ? "" : efectividades[0].FncEsGrupI %>" readonly>
+  						<input type="text" class="form-control" id="asignaturadesc" value="<%= Object.keys(efectividades).length>1 ? "" : arrAsignaturas[efectividades[0].FncEsGrupI] %>" readonly>
   					</div>
   				</div>
   				<div class="form-group">
   					<label for="origen" class="col-sm-2 control-label">Efectivo en:</label>
   					<div class="col-sm-4">
-  						<input type="text" class="form-control" id="origen" value="<%= cargo.departamento %>" readonly>
+              <input type="hidden" class="form-control" id="origen" value="<%= Object.keys(efectividades).length>1 ? "" : efectividades[0].FncEsDepto %>" readonly>
+  						<input type="text" class="form-control" id="origendesc" value="<%= Object.keys(efectividades).length>1 ? "" : arrDepartamentos[efectividades[0].FncEsDepto] %>" readonly>
   					</div>
   				</div>
   				<p>Solicita trasladar su efectividad al primero de estos departamentos que tenga cupo para la asignatura:</p>
@@ -174,3 +203,11 @@
 </div>
 
 </div>
+<% if (Object.keys(efectividades).length>1) { %>
+<script type="text/javascript">
+window.onload = function(){
+		$('button#btnsolicitud').html("Seleccione un cargo para continuar");
+		$('button#btnsolicitud').attr('disabled','disabled');
+	};
+</script>
+<% } %>

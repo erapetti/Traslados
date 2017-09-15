@@ -23,7 +23,8 @@ module.exports = {
 				//session = {Sesionesid:1,Userid:'u10121248',Dependid:1023,Lugarid:1023};
 				//session = {Sesionesid:1,Userid:'u19724241',Dependid:1023,Lugarid:1023};
 				//session = {Sesionesid:1,Userid:'u13683344',Dependid:1023,Lugarid:1023};
-				session = {Sesionesid:1,Userid:'u17488617',Dependid:1023,Lugarid:1023};
+				//session = {Sesionesid:1,Userid:'u29502003',Dependid:1023,Lugarid:1023};
+				session = {Sesionesid:1,Userid:'u18098726',Dependid:1023,Lugarid:1023};
 			}
 			if (err) {
 				return res.forbidden(err);
@@ -46,91 +47,91 @@ module.exports = {
 
 				persona.ci = session.Userid.substr(1);
 
-				// los docentes son efectivos en una única asignatura
-				Escalafon.findOne({fnccedula:ci,fncEsCargI:'000'}).exec(function(err, efectividad) {
+				Departamentos.find({DeptoId:{'<':20}}).exec(function(err, departamentos) {
 					if (err) {
 						return res.serverError(err);
 					}
-					if (typeof efectividad==='undefined') {
-						var mensaje = {texto: "No se encuentran cargos efectivos para la cédula "+ci};
-						return res.view({anio:anio,mensaje:mensaje});
-					}
 
-					var ingreso = new Date(efectividad.FncEsFecha);
+					var arrDepartamentos = Array();
+					departamentos.forEach(function(d) {
+						arrDepartamentos[d.DeptoId] = d.DeptoNombre;
+					});
 
-					// los docentes son efectivos en una única asignatura
-					Asignaturas.findOne({AsignId:efectividad.FncEsGrupI}).exec(function(err, asignaturas) {
+					// cada registro del escalafón es de una única asignatura
+					Asignaturas.find().exec(function(err, asignaturas) {
 						if (err) {
 							return res.serverError(err);
 						}
 
-						var asig = asignaturas.AsignDesc;
+						var arrAsignaturas = Array();
+						asignaturas.forEach(function(a) {
+							arrAsignaturas[a.AsignId] = a.AsignDesc;
+						});
 
-						Departamentos.find({DeptoId:{'<':20}}).exec(function(err, departamentos) {
+						Cupos.find().exec(function(err, cupos) {
 							if (err) {
 								return res.serverError(err);
 							}
 
-							var arrDepartamentos = Array();
-							departamentos.forEach(function(d) {
-								arrDepartamentos[d.DeptoId] = d.DeptoNombre;
+							var arrCupos = Array();
+							cupos.forEach(function(c) {
+								if (typeof arrCupos[c.AsignId] === 'undefined') {
+									arrCupos[c.AsignId] = Array();
+								}
+								arrCupos[c.AsignId][c.DeptoId] = c.Cupo;
 							});
-							var dpto = departamentos.find(function(v){if (v.DeptoId===efectividad.FncEsDepto){return true}}).DeptoNombre;
 
-							Traslados.findOne({Anio:anio, PersonalPerid:persona.perid, Borrado:'N'}).exec(function(err, traslado) {
+							Escalafon.find({fnccedula:ci,fncEsCargI:'000'}).exec(function(err, efectividades) {
 								if (err) {
 									return res.serverError(err);
 								}
-
-								var cargo = {
-									cargo:"DOCENTE",
-									AsignId:efectividad.FncEsGrupI,
-									asignatura:asig,
-									DeptoId:efectividad.FncEsDepto,
-									departamento:dpto,
-									grado:efectividad.FncEsGrado,
-									ingreso:ingreso.getFullYear()
-								};
-
-								if (typeof traslado !== 'undefined') {
-									// hay un traslado registrado
-
-									if (req.param("anular") === "s") {
-										// es una solicitud para anular el traslado
-										tid = req.param("tid");
-										if (typeof tid !== 'undefined' && parseInt(tid)>0) {
-											sails.log(new Date,"Anulo traslado "+tid+" Userid="+session.Userid);
-											Traslados.update({id:tid},{Borrado:'S'},function(err,records) {
-												 if (err) {
-													 	sails.log(new Date,"Al anular traslado "+tid,err);
-													}
-												 return res.redirect(sails.config.environment==='development' ? '' : '/node/traslados');
-											 });
-											 return;
-										}
-									}
-									try {
-										traslado.UpdatedAt = fecha_toString(traslado.UpdatedAt);
-									} catch (e) {
-										traslado.UpdatedAt = '';
-									};
-									try {
-										traslado.Destino = traslado.Destino.map(function(v){ return arrDepartamentos[v] }).toString();
-									} catch (e) {
-									}
-									return res.view({anio:anio,persona:persona,cargo:cargo,traslado:traslado});
+								if (typeof efectividades==='undefined') {
+									var mensaje = {texto: "No se encuentran cargos efectivos para la cédula "+ci};
+									return res.view({anio:anio,mensaje:mensaje});
 								}
 
-								Cupos.find({AsignId:efectividad.FncEsGrupI}).exec(function(err, cupos) {
+								Traslados.findOne({Anio:anio, PersonalPerid:persona.perid, Borrado:'N'}).exec(function(err, traslado) {
 									if (err) {
 										return res.serverError(err);
 									}
 
+									if (typeof traslado !== 'undefined') {
+										// hay un traslado registrado
+
+										if (req.param("anular") === "s") {
+											// es una solicitud para anular el traslado
+											tid = req.param("tid");
+											if (typeof tid !== 'undefined' && parseInt(tid)>0) {
+												sails.log(new Date,"Anulo traslado "+tid+" Userid="+session.Userid);
+												Traslados.update({id:tid},{Borrado:'S'},function(err,records) {
+													 if (err) {
+														 	sails.log(new Date,"Al anular traslado "+tid,err);
+														}
+													 return res.redirect(sails.config.environment==='development' ? '' : '/node/traslados');
+												 });
+												 return;
+											}
+										}
+										try {
+											traslado.UpdatedAt = fecha_toString(traslado.UpdatedAt);
+										} catch (e) {
+											traslado.UpdatedAt = '';
+										};
+										try {
+											traslado.Destino = traslado.Destino.map(function(v){ return arrDepartamentos[v] }).toString();
+										} catch (e) {
+										}
+										return res.view({anio:anio,persona:persona,cargo:cargo,traslado:traslado});
+									}
+
+									// no hay pedido previo de traslado
 									var destino = req.param("destino");
 									if (! destino) {
 										// formulario inicial
-										return res.view({anio:anio,persona:persona,cargo:cargo,departamentos:departamentos,cupos:cupos,origen:efectividad.FncEsDepto});
+										return res.view({anio:anio,persona:persona,arrDepartamentos:arrDepartamentos,arrAsignaturas:arrAsignaturas,arrCupos:arrCupos,efectividades:efectividades});
 									}
+
+									// tengo un destino para registrar
 									try {
 										var destinos = destino.split(',').map(function(v) { return parseInt(v) });
 
@@ -160,8 +161,8 @@ module.exports = {
 				});
 			});
 		});
-
 	},
+
 };
 
 
