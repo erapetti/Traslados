@@ -63,7 +63,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="/node/traslados%s"></script>',
+        fileTmpl: '<script src="/node/traslados%s?v=<%- (new Date()).getTime() %>"></script>',
         appRoot: '.tmp/public'
       },
       files: {
@@ -123,7 +123,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="/node/traslados%s">',
+        fileTmpl: '<link rel="stylesheet" href="/node/traslados%s?v=<%- (new Date()).getTime() %>">',
         appRoot: '.tmp/public'
       },
       files: {
