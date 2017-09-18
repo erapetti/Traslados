@@ -23,8 +23,8 @@ module.exports = {
 				//session = {Sesionesid:1,Userid:'u10121248',Dependid:1023,Lugarid:1023};
 				//session = {Sesionesid:1,Userid:'u19724241',Dependid:1023,Lugarid:1023};
 				//session = {Sesionesid:1,Userid:'u13683344',Dependid:1023,Lugarid:1023};
-				//session = {Sesionesid:1,Userid:'u29502003',Dependid:1023,Lugarid:1023};
-				session = {Sesionesid:1,Userid:'u18098726',Dependid:1023,Lugarid:1023};
+				session = {Sesionesid:1,Userid:'u29502003',Dependid:1023,Lugarid:1023};
+				//session = {Sesionesid:1,Userid:'u18098726',Dependid:1023,Lugarid:1023};
 			}
 			if (err) {
 				return res.forbidden(err);
@@ -90,19 +90,21 @@ module.exports = {
 									return res.view({anio:anio,mensaje:mensaje});
 								}
 
-								Traslados.findOne({Anio:anio, PersonalPerid:persona.perid, Borrado:'N'}).exec(function(err, traslado) {
+								var objTraslados;
+
+								Traslados.find({Anio:anio, PersonalPerid:persona.perid, Borrado:'N'}).exec(function(err, traslados) {
 									if (err) {
 										return res.serverError(err);
 									}
 
-									if (typeof traslado !== 'undefined') {
-										// hay un traslado registrado
+									if (typeof traslados[0] !== 'undefined') {
+										// hay traslados registrados
 
 										if (req.param("anular") === "s") {
 											// es una solicitud para anular el traslado
 											tid = req.param("tid");
 											if (typeof tid !== 'undefined' && parseInt(tid)>0) {
-												sails.log(new Date,"Anulo traslado "+tid+" Userid="+session.Userid);
+												sails.log(new Date,"Anulo traslado "+tid+" de "+session.Userid);
 												Traslados.update({id:tid},{Borrado:'S'},function(err,records) {
 													 if (err) {
 														 	sails.log(new Date,"Al anular traslado "+tid,err);
@@ -112,34 +114,43 @@ module.exports = {
 												 return;
 											}
 										}
-										try {
-											traslado.UpdatedAt = fecha_toString(traslado.UpdatedAt);
-										} catch (e) {
-											traslado.UpdatedAt = '';
-										};
-										try {
-											traslado.Destino = traslado.Destino.map(function(v){ return arrDepartamentos[v] }).toString();
-										} catch (e) {
-										}
-										return res.view({anio:anio,persona:persona,cargo:cargo,traslado:traslado});
+										traslados.forEach(function(traslado){
+											try {
+												traslado.UpdatedAt = fecha_toString(traslado.UpdatedAt);
+												traslado.Destino = traslado.Destino.map(function(v){ return arrDepartamentos[v] }).toString();
+												traslado.Asignatura = arrAsignaturas[traslado.AsignId];
+												traslado.Departamento = arrDepartamentos[traslado.DeptoId];
+											} catch (e) {	}
+										});
+										objTraslados = traslados;
 									}
 
 									// no hay pedido previo de traslado
 									var destino = req.param("destino");
 									if (! destino) {
 										// formulario inicial
-										return res.view({anio:anio,persona:persona,arrDepartamentos:arrDepartamentos,arrAsignaturas:arrAsignaturas,arrCupos:arrCupos,efectividades:efectividades});
+										return res.view({anio:anio,persona:persona,arrDepartamentos:arrDepartamentos,arrAsignaturas:arrAsignaturas,arrCupos:arrCupos,efectividades:efectividades,traslados:objTraslados});
 									}
 
 									// tengo un destino para registrar
 									try {
 										var destinos = destino.split(',').map(function(v) { return parseInt(v) });
-
+										var asignid = req.param("asignid");
+										var origen = req.param("origen");
+										var valido=false;
+										efectividades.forEach(function(efectividad){
+											if (efectividad.FncEsGrupI == asignid && efectividad.FncEsDepto == origen) {
+												valido=true;
+											}
+										});
+										if (!valido) {
+											return res.serverError(new Error("Parámetros incorrectos"));
+										}
 										Traslados.create({
 											Anio:anio,
 											PersonalPerid:persona.perid,
-											AsignId:efectividad.FncEsGrupI,
-											DeptoId:efectividad.FncEsDepto,
+											AsignId:asignid,
+											DeptoId:origen,
 											Destino:destinos,
 											UserId:session.Userid
 										}).exec(function(err,data) {
@@ -149,11 +160,13 @@ module.exports = {
 												sails.log(new Date,mensaje.texto, mensaje.detalle);
 												return res.view({anio:anio,persona:persona,cargo:cargo,departamentos:departamentos,cupos:cupos,origen:efectividad.FncEsDepto,mensaje:mensaje});
 											} else {
-												sails.log(new Date,"Guardado destino de "+session.Userid+" que es "+destino);
+												sails.log(new Date,"Guardado destino de "+session.Userid+" para "+asignid+" que es "+destino);
 												return res.redirect(sails.config.environment==='development' ? '' : '/node/traslados');
 											}
 										});
-									} catch (e) {}
+									} catch (e) {
+										return res.serverError(new Error("Error al guardar sus preferencias. Por favor reintente luego."));
+									}
 								});
 							});
 						});

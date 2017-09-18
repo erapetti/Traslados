@@ -21,9 +21,9 @@ $('button#btnpaso2').attr('disabled','disabled');
 $('table#cargos tr td').click(function(e){
 	// marco la fila como seleccionada:
 	$('table#cargos tr').attr('checked',false);
-	$('#'+e.target.parentNode.id).attr('checked',true);
+	$('#'+e.currentTarget.parentNode.id).attr('checked',true);
 	// marco el radio button como seleccionado:
-	$('#'+e.target.parentNode.firstElementChild.firstChild.id).prop('checked',true);
+	$('#'+e.currentTarget.parentNode.firstElementChild.firstChild.id).prop('checked',true);
 	// actualizo los departamentos
 	actualizo_departamentos();
 	// actualizo el form de solicitud

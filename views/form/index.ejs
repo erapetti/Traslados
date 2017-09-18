@@ -38,9 +38,9 @@ var arrCupos = Array();
     <% } %>
   </div>
 
-<% } else if(typeof traslado !== 'undefined') { -%>
+<% } else if(typeof traslados !== 'undefined') { -%>
 
-  <p class="intro">Ud. tiene registradas las opciones de destino
+  <p class="intro">Ud. tiene registradas opciones de destino
      para su traslado.<br>
      A continuación puede anular su selección actual si es que desiste del
      traslado o porque desea modificar los destinos o su ordenamiento.</p>
@@ -57,38 +57,44 @@ var arrCupos = Array();
 				<th>Departamento</th>
 				<th>Destinos</th>
 				<th>Fecha de solicitud</th>
-			</tr><tr>
+        <th>Acción</th>
+			</tr>
+      <% traslados.forEach(function(traslado){ -%>
+      <tr>
         <td><%= persona.pernombrecompleto %></td>
-        <td><%= cargo.asignatura %></td>
-        <td><%= cargo.departamento %></td>
+        <td><%= traslado.Asignatura %></td>
+        <td><%= traslado.Departamento %></td>
         <td><%= traslado.Destino %></td>
         <td><%= traslado.UpdatedAt %></td>
+        <td>
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete<%= traslado.id%>"><b>Anular solicitud</b></button>
+          <!-- Modal -->
+          <div id="confirmDelete<%= traslado.id%>" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Anular solicitud</h4>
+                </div>
+                <div class="modal-body">
+                  <p>¿Confirma que desea anular la solicitud de traslado de <%= traslado.Asignatura %>?</p>
+                </div>
+                <form method="post" id='anular<%= traslado.id%>'>
+                  <input type="hidden" name="tid" value="<%= traslado.id %>">
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-danger" name="anular" value="s">Sí</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </td>
       </tr>
+      <% }) %>
       </table>
       </div>
 
-    </div>
-  </div>
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete"><b>Anular solicitud de traslado</b></button>
-  <!-- Modal -->
-  <div id="confirmDelete" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Anular solicitud</h4>
-        </div>
-        <div class="modal-body">
-          <p>¿Confirma que desea anular la solicitud de traslado?</p>
-        </div>
-        <form method="post" id='anular'>
-        <input type="hidden" name="tid" value="<%= traslado.id %>">
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-          <button type="submit" class="btn btn-danger" name="anular" value="s">Sí</button>
-        </div>
-        </form>
-      </div>
     </div>
   </div>
 
@@ -96,20 +102,27 @@ var arrCupos = Array();
 <% } else { -%>
 
   <p class="intro">Actualmente no tiene registradas las opciones de
-     destino para su traslado.<br>
-     Normalmente su traslado se hará efectivo al primer destino que elija
-     salvo que en el mismo no existan Unidades Docentes
-     disponibles, en cuyo caso se considerarán, en orden, los otros destinos que
-     indicó hasta encontrar uno con disponibilidad.<br>
-     Requisitos para ser trasladado:
+     destino para su traslado.
+  </p>
+<% } %>
+
+<% if ((typeof traslados === 'undefined' ? 0 : traslados.length) < efectividades.length) { %>
+
+  <p class="intro"><b>Cargos efectivos para los que puede solicitar traslado</b></p>
+
+  <p class="intro">
+    Normalmente su traslado se hará efectivo al primer destino que elija
+    salvo que en el mismo no existan Unidades Docentes
+    disponibles, en cuyo caso se considerarán, en orden, los otros destinos que
+    indicó hasta encontrar uno con disponibilidad.<br>
+    Requisitos para ser trasladado:
   </p>
   <ul class="intro">
     <li>Contar con dos años en el cargo</li>
     <li>Tener 71 puntos o más en Aptitud Docente en su actuación durante <%= anio-1 %></li>
     <li>Haber registrado su opción de destino por un departamento con
-        Unidades Docentes disponibles en su asignatura</li>
-  </ul>
-
+      Unidades Docentes disponibles en su asignatura</li>
+    </ul>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">Cargo de docencia directa que desea trasladar:</div>
@@ -125,7 +138,15 @@ var arrCupos = Array();
 				<th>Grado</th>
 				<th>Año ingreso</th>
       </tr>
-        <% efectividades.forEach(function(efectividad){ -%>
+        <% efectividades.forEach(function(efectividad){
+            try {
+              if (traslados.find(function(traslado) {
+                return (traslado.AsignId == efectividad.FncEsGrupI && traslado.DeptoId == efectividad.FncEsDepto);
+              })) {
+                return; // esta efectividad ya tiene traslado solicitado
+              }
+            } catch(e) {}
+        -%>
 			<tr id="tr-<%= efectividad.FncEsGrupI %>-<%= efectividad.FncEsDepto %>">
         <td><input type="radio" name="cargo" id="<%= efectividad.FncEsGrupI %>-<%= efectividad.FncEsDepto %>"<% if (Object.keys(efectividades).length==1) {%> checked="checked"<%}%>></td>
 				<td>DOCENTE</td>
@@ -171,14 +192,14 @@ var arrCupos = Array();
   				<div class="form-group">
   					<label for="asignatura" class="col-sm-2 control-label">Asignatura:</label>
   					<div class="col-sm-4">
-              <input type="hidden" class="form-control" id="asignatura" value="<%= Object.keys(efectividades).length>1 ? "" : efectividades[0].FncEsGrupI %>" readonly>
+              <input type="hidden" class="form-control" name="asignid" id="asignatura" value="<%= Object.keys(efectividades).length>1 ? "" : efectividades[0].FncEsGrupI %>" readonly>
   						<input type="text" class="form-control" id="asignaturadesc" value="<%= Object.keys(efectividades).length>1 ? "" : arrAsignaturas[efectividades[0].FncEsGrupI] %>" readonly>
   					</div>
   				</div>
   				<div class="form-group">
   					<label for="origen" class="col-sm-2 control-label">Efectivo en:</label>
   					<div class="col-sm-4">
-              <input type="hidden" class="form-control" id="origen" value="<%= Object.keys(efectividades).length>1 ? "" : efectividades[0].FncEsDepto %>" readonly>
+              <input type="hidden" class="form-control" name="origen" id="origen" value="<%= Object.keys(efectividades).length>1 ? "" : efectividades[0].FncEsDepto %>" readonly>
   						<input type="text" class="form-control" id="origendesc" value="<%= Object.keys(efectividades).length>1 ? "" : arrDepartamentos[efectividades[0].FncEsDepto] %>" readonly>
   					</div>
   				</div>
