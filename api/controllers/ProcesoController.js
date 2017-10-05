@@ -60,7 +60,7 @@ module.exports = {
 						arrCupos[c.AsignId][c.DeptoId] = c.Cupo;
 					});
 
-					Proceso.proceso(function(err,result) {
+					Proceso.proceso2017(function(err,result) {
 						if (err || !result) {
 							console.log("error en proceso",err);
 							var mensaje = {texto:"No se pudo obtener el resultado del proceso de traslado",

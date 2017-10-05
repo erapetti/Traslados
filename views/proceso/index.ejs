@@ -1,4 +1,10 @@
 <!-- Default home page -->
+<% String.prototype.fmtCedula = function () {
+      return this.replace(/(.)?(...)(...)(.)$/, function(match,millon,mil,unidades,verif) {
+             return millon+'.'+mil+'.'+unidades+'-'+verif;
+      });
+};
+-%>
 
 <div id="page-form">
 
@@ -31,6 +37,7 @@
     <div class="table-responsive">
     <table class="table table-bordered" id="resultado">
     <tr>
+      <th>Cédula</th>
     	<th>Nombre</th>
     	<th>Asignatura</th>
     	<th>Departamento</th>
@@ -40,6 +47,7 @@
       <th style="width:200px">Resultado</th>
     </tr>
     <% traslado.forEach(function(info) { %><tr>
+      <td><%= info.PerDocId.fmtCedula() %></td>
       <td><%= info.PerNombreCompleto %></td>
       <td><%= info.AsignDesc %></td>
       <td><%= arrDepartamentos[info.DeptoId] %></td>
@@ -50,7 +58,7 @@
       <td><%= JSON.parse(info.Destino).map(function(d){
         return info.cupo[d];
       }).join(', ') %></td>
-      <td><%= arrDepartamentos[info.destino] %></td>
+      <td><%- typeof info.destino === 'undefined' ? '<b>NO HAY CUPOS LIBRES</b>' : arrDepartamentos[info.destino] %></td>
     </tr><% }) %>
     </table>
     </div>

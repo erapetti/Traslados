@@ -1,6 +1,8 @@
 
 function proceso(event) {
 
+  var espera=300; // cuántos milisegundos esperar entre un reglón y el siguiente para dar dramatismo
+
   event.preventDefault();
   btn_disable( $('#btnproceso') );
   var line=2;
@@ -18,7 +20,7 @@ function proceso(event) {
           $('#resultado tr:nth-child('+line+') td').css('background-color','');
           line+=1;
           if (line <= postulantes+1) {
-            setTimeout(siguiente,1000);
+            setTimeout(siguiente, espera);
           } else {
             btn_enable( $('#btnimprimir') );
             $("html, body").scrollTop( $(document).height() );
@@ -27,7 +29,7 @@ function proceso(event) {
       });
     });
   };
-  setTimeout(siguiente,1000);
+  setTimeout(siguiente, espera);
 };
 
 function btn_enable(btn) {

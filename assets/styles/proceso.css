@@ -2,6 +2,9 @@ table#resultado {
   margin-top:2em;
   margin-bottom:2em;
 }
+table#resultado td:last-child {
+  white-space:nowrap;
+}
 button {
   margin:0.5em;
   min-width:210px;
@@ -14,5 +17,13 @@ button {
 @media print {
   #botones {
     display:none;
+  }
+  body {
+    font-size:9px;
+    margin:0;
+    padding:0;
+  }
+  table#resultado {
+    width:100%;
   }
 }
