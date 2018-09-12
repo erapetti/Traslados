@@ -60,12 +60,12 @@ module.exports = {
 						arrCupos[c.AsignId][c.DeptoId] = c.Cupo;
 					});
 
-					Proceso.proceso2017(function(err,result) {
+					Proceso.proceso2018(function(err,result) {
 						if (err || !result) {
 							console.log("error en proceso",err);
 							var mensaje = {texto:"No se pudo obtener el resultado del proceso de traslado",
 														 detalle:err.details};
-							return res.view({mensaje:mensaje});
+							return res.view({anio:anio,mensaje:mensaje});
 						}
 						// Determino el destino del traslado
 						var destinos = Array();
@@ -80,7 +80,7 @@ module.exports = {
 								}
 							})
 						});
-						return res.view({traslado:result,arrDepartamentos:arrDepartamentos,arrCupos:arrCupos});
+						return res.view({anio:anio,traslado:result,arrDepartamentos:arrDepartamentos,arrCupos:arrCupos});
 					});
 				});
 			});
