@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  connection: 'Personal',
+  connection: 'traslados',
   autoCreatedAt: true,
   autoUpdatedAt: true,
   autoPK: false,
@@ -75,5 +75,35 @@ module.exports = {
       }
       callback(err, result);
     });
-  }
+  },
+
+  proceso2018: function(callback) {
+    return this.query(`
+      select PerDocId,PersonalPerid,PerNombreCompleto,AsignId,AsignDesc,
+             DeptoId,Destino,concat(FncEsGrado,'/',year(FncEsFecha)) Grado
+      from (select PersonalPerid,AsignId,DeptoId,Destino
+            from traslados_destinos t
+            where Anio=year(curdate())
+              and borrado='N'
+            group by 1,2,3,4
+          ) T
+      join Personas.PERSONASDOCUMENTOS
+        on PERSONALPERID=PERID AND PAISCOD='UY' AND DOCCOD='CI'
+      join legajos.GRADOS2018 on cast(perdocid as UNSIGNED)=fnccedula and asignid=FncEsGrupI
+      join legajos.FNCESPU2018 P using (fnccedula,fncescargi,fncesgrupi)
+      join Estudiantil.ASIGNATURAS using (asignid)
+      join Personas.PERSONAS using (perid)
+      where FncEsCargI='000'
+      and FncEsYearP=year(curdate())-1
+      order by asignid,FncEsGrado desc,if(year(FncEsFecha)=year(curdate()),0,fncespromy) desc,FncEsAptit desc,fncesordin
+    `,
+    [],
+    function(err,result){
+      if (result===null) {
+        err = new Error("No se pueden obtener los registros de traslado",undefined);
+      }
+      callback(err, result);
+    });
+  },
+
 };
