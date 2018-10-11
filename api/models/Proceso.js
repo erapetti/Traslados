@@ -77,7 +77,11 @@ module.exports = {
     });
   },
 
-  proceso2018: function(callback) {
+  proceso: function(callback) {
+    var anio = new Date().getFullYear();
+    var grados = "GRADOS"+anio;
+    var fncescpu = "FNCESCPU"+anio;
+
     return this.query(`
       select PerDocId,PersonalPerid,PerNombreCompleto,AsignId,AsignDesc,
              DeptoId,Destino,concat(FncEsGrado,'/',year(FncEsFecha)) Grado
@@ -89,8 +93,8 @@ module.exports = {
           ) T
       join Personas.PERSONASDOCUMENTOS
         on PERSONALPERID=PERID AND PAISCOD='UY' AND DOCCOD='CI'
-      join legajos.GRADOS2018 on cast(perdocid as UNSIGNED)=fnccedula and asignid=FncEsGrupI
-      join legajos.FNCESPU2018 P using (fnccedula,fncescargi,fncesgrupi)
+      join legajos.`+grados+` on cast(perdocid as UNSIGNED)=fnccedula and asignid=FncEsGrupI
+      join legajos.`+fncescpu+` P using (fnccedula,fncescargi,fncesgrupi)
       join Estudiantil.ASIGNATURAS using (asignid)
       join Personas.PERSONAS using (perid)
       where FncEsCargI='000'
