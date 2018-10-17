@@ -8,15 +8,15 @@ function proceso(event) {
   var line=2;
   function siguiente() {
     $('#resultado tr:nth-child('+line+') td').css('background-color','lightblue');
-    $('#resultado tr:nth-child('+line+') td:nth-child(6)').css('color','');
+    $('#resultado tr:nth-child('+line+') td:nth-child(7)').css('color','');
     $("html, body").scrollTop(
       $('#resultado tr:nth-child('+line+')').offset().top + $('#resultado tr:nth-child('+line+')').outerHeight(true) - $(window).height()
     );
-    $('#resultado tr:nth-child('+line+') td:nth-child(6)').animate({"font-size":"200%"},50,"swing",function(){
-      $('#resultado tr:nth-child('+line+') td:nth-child(6)').animate({"font-size":"100%"},150,"swing",function(){
-        $('#resultado tr:nth-child('+line+') td:nth-child(7)').css('color','');
-        $('#resultado tr:nth-child('+line+') td:nth-child(7)').animate({"font-size":"200%"},50,"swing",function(){
-          $('#resultado tr:nth-child('+line+') td:nth-child(7)').animate({"font-size":"100%"},150);
+    $('#resultado tr:nth-child('+line+') td:nth-child(7)').animate({"font-size":"200%"},50,"swing",function(){
+      $('#resultado tr:nth-child('+line+') td:nth-child(7)').animate({"font-size":"100%"},150,"swing",function(){
+        $('#resultado tr:nth-child('+line+') td:nth-child(8)').css('color','');
+        $('#resultado tr:nth-child('+line+') td:nth-child(8)').animate({"font-size":"200%"},50,"swing",function(){
+          $('#resultado tr:nth-child('+line+') td:nth-child(8)').animate({"font-size":"100%"},150);
           $('#resultado tr:nth-child('+line+') td').css('background-color','');
           line+=1;
           if (line <= postulantes+1) {
@@ -49,8 +49,8 @@ $(document).ready(function() {
   btn_enable( $('#btnver') );
   $('#btnver').click(function() {
     $('#resultado').show();
-    $('#resultado tr td:nth-child(6)').css('color','transparent');
     $('#resultado tr td:nth-child(7)').css('color','transparent');
+    $('#resultado tr td:nth-child(8)').css('color','transparent');
     btn_enable( $('#btnproceso') );
     btn_disable( $('#btnver') );
   });
