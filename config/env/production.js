@@ -34,6 +34,7 @@ module.exports = {
   log: {
 //    level: "silent"
     level: "info"
-  }
+  },
 
+  unidadesDocentesDisponibles: 'https://www.ces.edu.uy/files/2019/DGSE/Traslados/Unidades_para_Traslados_2019.pdf',
 };
